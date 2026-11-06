@@ -1,0 +1,1575 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exam 1: Common mistakes</title>
+<style>
+:root{
+  color-scheme: light;
+  --paper:#F6F8F7; --card:#FFFFFF; --ink:#1C2632; --muted:#5C6977; --line:#D3DAE1; --soft:#EDF1F0;
+  --lime:#A9C83B; --lime-ink:#43680F; --lime-bg:#F1F7DD;
+  --i:#5B3FA8; --i-bg:#EEE9FA;
+  --q:#1D5FC2; --q-bg:#E4EEFC;
+  --s:#A04C00; --s-bg:#FDEBD6;
+  --v:#A4185A; --v-bg:#FAE3EF;
+  --t:#08695D; --t-bg:#DBF2EE;
+  --z:#3F6A0E; --z-bg:#EAF3D6;
+  --e:#C0272D; --e-bg:#FCE4E4;
+  --c:#1F7A3A; --c-bg:#DDF3E3;
+  --g:#97A1AC; --g-bg:#EEF0F2;
+  --sans:"Avenir Next","Avenir","Segoe UI","Helvetica Neue",system-ui,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --scale:1;
+}
+*{box-sizing:border-box}
+html{font-size:calc(var(--scale) * clamp(17px, .85vw + .6vh, 30px))}
+body{margin:0;height:100vh;height:100dvh;display:grid;grid-template-rows:auto 1fr auto;grid-template-columns:minmax(0,1fr);background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.45;overflow:hidden;-webkit-font-smoothing:antialiased}
+q{quotes:"“" "”" "‘" "’"}
+em{font-style:italic}
+
+/* Header */
+.top{background:var(--card);border-bottom:1px solid var(--line)}
+.top::before{content:"";display:block;height:.35rem;background:linear-gradient(90deg,var(--e) 0 30%,var(--lime) 70% 100%)}
+.topin{display:flex;align-items:center;gap:1.5rem;padding:.4rem clamp(16px,3vw,48px)}
+.tt{font-weight:600;font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tt b{color:var(--lime-ink)}
+#prog{display:flex;gap:1rem;margin-left:auto;overflow-x:auto;padding:.15rem;min-width:0}
+.grp{display:flex;flex-direction:column;gap:.2rem}
+.gl{font-size:.62rem;color:var(--muted);font-weight:600;white-space:nowrap}
+.segs{display:flex;gap:.25rem}
+.seg{width:1.3rem;height:.55rem;border-radius:.3rem;border:0;background:var(--line);cursor:pointer;padding:0;transition:background-color .3s}
+.seg.seen{background:#C3D58A}
+.seg.cur{background:var(--lime-ink)}
+.seg:focus-visible{outline:3px solid var(--q);outline-offset:2px}
+
+/* Slides */
+main{position:relative;overflow:hidden}
+.slide{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding:1.5rem clamp(16px,4vw,72px) 2.5rem;display:none}
+.slide.cur{display:block;animation:enter .35s ease-out}
+@keyframes enter{from{opacity:0;transform:translateX(1.2rem)}to{opacity:1;transform:none}}
+.wrap{max-width:78rem;margin:0 auto}
+h1,h2,h3,h4{margin:0;line-height:1.12;letter-spacing:-.01em}
+h2{font-size:2.1rem;font-weight:700;margin-bottom:.35rem}
+h3{font-size:1.15rem;font-weight:700}
+.lead{font-size:1.15rem;color:var(--muted);margin:.2rem 0 1.1rem;max-width:50em}
+.stat{display:inline-flex;align-items:center;gap:.35em;font-size:.85rem;font-weight:600;color:var(--e);background:var(--e-bg);border-radius:2em;padding:.12em .7em;margin-right:.4em;white-space:nowrap;vertical-align:.1em}
+.stat b{font-size:1.05em}
+
+/* Word tiles */
+.w{display:inline-flex;align-items:center;padding:.22em .55em .26em;border-radius:.45em;background:var(--card);border:2px solid var(--line);border-bottom-width:.2em;font-weight:600;font-size:1.5rem;line-height:1.15;color:var(--ink);white-space:nowrap;transition:background-color .45s,color .45s,border-color .45s}
+.w .tx{display:inline-block}
+.w.r-i{background:var(--i-bg);border-color:var(--i);color:var(--i)}
+.w.r-q{background:var(--q-bg);border-color:var(--q);color:var(--q)}
+.w.r-s{background:var(--s-bg);border-color:var(--s);color:var(--s)}
+.w.r-v{background:var(--v-bg);border-color:var(--v);color:var(--v)}
+.w.r-t{background:var(--t-bg);border-color:var(--t);color:var(--t)}
+.w.r-z{background:var(--z-bg);border-color:var(--z);color:var(--z)}
+.w.r-e{background:var(--e-bg);border-color:var(--e);color:var(--e);text-decoration:underline wavy;text-decoration-thickness:.07em;text-underline-offset:.22em}
+.w.r-c{background:var(--c-bg);border-color:var(--c);color:var(--c)}
+.w.r-p,.w.r-pe,.w.r-pc{background:transparent;border-color:transparent;padding-inline:.08em;font-size:1.75rem}
+.w.r-pe{color:var(--e);font-weight:800}
+.w.r-pc{color:var(--c);font-weight:800}
+.w.r-g{background:var(--g-bg);border-color:var(--g);border-style:dashed;color:var(--g);text-decoration:line-through;text-decoration-thickness:.12em}
+.w.sm{font-size:1.02rem;border-width:1.5px;border-bottom-width:.2em}
+
+/* Highlights in running text */
+.m{font-weight:700;border-radius:.2em;padding:0 .12em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.m-i{color:var(--i);background:var(--i-bg)}
+.m-q{color:var(--q);background:var(--q-bg)}
+.m-s{color:var(--s);background:var(--s-bg)}
+.m-v{color:var(--v);background:var(--v-bg)}
+.m-t{color:var(--t);background:var(--t-bg)}
+.m-z{color:var(--z);background:var(--z-bg)}
+.m-e{color:var(--e);background:var(--e-bg)}
+.m-c{color:var(--c);background:var(--c-bg)}
+.m-g{display:inline-block;min-width:3.2em;border-bottom:2px solid var(--muted);padding:0;margin:0 .1em;color:transparent}
+.m-x{font-weight:inherit;background:none;padding:0}
+.it.on .m-x{text-decoration:line-through;text-decoration-color:var(--e);text-decoration-thickness:.12em;color:var(--muted)}
+
+/* Reveal */
+.rv{opacity:0;visibility:hidden;transform:translateY(.6rem);transition:opacity .45s,transform .45s,visibility 0s .45s}
+.rv.on{opacity:1;visibility:visible;transform:none;transition:opacity .45s,transform .45s,visibility 0s}
+
+/* Start */
+.hero{padding-top:.6rem}
+.station{font-weight:600;color:var(--lime-ink);margin:0 0 .8rem}
+.hero h1{font-size:2.5rem;display:flex;flex-wrap:wrap;align-items:center;gap:.35em .3em;margin-bottom:1.4rem}
+.hero h1 .w{font-size:1em;font-weight:700;transform:rotate(var(--r,0deg));animation:drop .7s cubic-bezier(.2,.9,.3,1.25) both;animation-delay:calc(var(--d,0) * 110ms + 150ms)}
+.hero h1 .and{font-weight:600;color:var(--muted);font-size:.7em;animation:fade .6s both .6s}
+@keyframes drop{from{opacity:0;transform:translateY(-1.4em) rotate(calc(var(--r,0deg) * -4))}to{opacity:1;transform:rotate(var(--r,0deg))}}
+@keyframes fade{from{opacity:0}}
+.startgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:2.5rem;align-items:start}
+.stats{display:flex;gap:2.5rem}
+.big{display:flex;flex-direction:column}
+.big span{font-size:3.4rem;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.big small{font-size:.95rem;color:var(--muted);font-weight:600}
+.ask{font-size:1.2rem;font-weight:600;margin:1.4rem 0 0;max-width:30em}
+.agenda{display:grid;gap:.9rem;margin-top:1.2rem}
+.agenda .part{display:flex;gap:.7rem;align-items:baseline}
+.agenda .num{display:grid;place-items:center;flex:none;width:1.9rem;height:1.9rem;border-radius:50%;background:var(--lime);font-weight:700;font-size:.95rem}
+.agenda b{font-size:1.15rem}
+.agenda span.sub{display:block;color:var(--muted);font-size:1rem}
+.bars{display:grid;gap:.55rem;margin-top:.2rem}
+.bars h3{margin-bottom:.2rem}
+.brow{display:grid;grid-template-columns:2.6rem 9.5rem minmax(0,1fr);align-items:center;gap:.6rem}
+.brow .k{display:grid;place-items:center;height:1.8rem;border-radius:.4rem;background:var(--e-bg);color:var(--e);font-weight:700;font-size:.9rem}
+.brow .lb{font-weight:600}
+.brow .track{height:1.45rem;background:var(--soft);border-radius:.35rem;overflow:hidden}
+.brow .fill{display:block;height:100%;width:0;background:var(--e);border-radius:.35rem;transition:width 1.1s cubic-bezier(.3,.7,.2,1);transition-delay:calc(var(--d) * 120ms)}
+.bars.on .fill{width:var(--w)}
+.brow .nm{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+
+/* Scenes with word tiles */
+.split{display:grid;grid-template-columns:minmax(0,1fr) 21rem;gap:2.2rem;align-items:start}
+.scene{padding:.7rem 0 .8rem;border-bottom:1px solid var(--line);transition:opacity .45s}
+.scene:first-child{padding-top:.2rem}
+.scene:last-child{border-bottom:0}
+.scene.off{visibility:hidden;opacity:0}
+.scene.dim{opacity:.4}
+.orig{margin:0 0 .45rem;font-size:.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.tiles{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;min-height:3.1rem}
+.tiles.tight{gap:.12rem}
+.tiles .w{font-size:1.38rem;max-width:100%;white-space:normal}
+.tiles .w.r-p,.tiles .w.r-pe,.tiles .w.r-pc{font-size:1.6rem}
+.glue{display:inline-flex;align-items:center;gap:.05rem}
+.cap{margin:.45rem 0 0;font-size:1.1rem;min-height:1.6em}
+.howto{background:var(--card);border:1px solid var(--line);border-radius:.8rem;padding:1rem 1.1rem;position:sticky;top:0}
+.howto h3{margin-bottom:.6rem}
+.howto .merke{margin-top:1rem;background:var(--paper)}
+.rules{list-style:none;margin:0;padding:0;counter-reset:r;display:grid;gap:.3rem}
+.rules li{counter-increment:r;position:relative;padding:.32rem .5rem .32rem 2.6rem;border-radius:.5rem;font-size:1.02rem;transition:opacity .5s,filter .5s,background-color .35s,box-shadow .35s}
+.rules li::before{content:counter(r);position:absolute;left:.5rem;top:.5rem;display:grid;place-items:center;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--ink);color:#fff;font-size:.8rem;font-weight:700}
+.rules li.lock{opacity:.2;filter:blur(3px)}
+.rules li.now{background:var(--lime-bg);box-shadow:inset .25rem 0 0 var(--lime)}
+
+/* Remember boxes */
+.merke{background:var(--card);border-left:.4rem solid var(--lime);border-radius:0 .7rem .7rem 0;padding:.75rem 1.1rem;margin-top:1.1rem}
+.merke > b:first-child{display:block;color:var(--lime-ink);font-size:.9rem;margin-bottom:.15rem}
+.merke p{margin:.2rem 0}
+.formula{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;margin-top:.35rem}
+.plus{color:var(--muted);font-weight:700;font-size:1.15rem}
+.note{font-size:1rem;color:var(--muted);margin:.8rem 0 0}
+.note em{color:var(--ink)}
+
+/* Flip cards */
+.ex-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.hint{font-size:.95rem;color:var(--muted);margin:.1rem 0 .8rem}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem}
+.cards.c2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{position:relative;height:4.4rem;border:0;padding:0;background:none;font:inherit;color:inherit;cursor:pointer;perspective:800px}
+.cards.tall .card{height:6rem}
+.cards.xtall .card{height:7.4rem}
+.card:focus-visible{outline:3px solid var(--q);outline-offset:3px;border-radius:.6rem}
+.card .face{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:.15rem;text-align:center;padding:.4rem .7rem;border-radius:.6rem;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .6s cubic-bezier(.4,.1,.2,1);font-weight:600;font-size:1.2rem;line-height:1.15}
+.card .front{background:var(--card);border:2px solid var(--line);border-bottom-width:.2em;color:var(--ink)}
+.card .front .x{color:var(--e);text-decoration:line-through;text-decoration-thickness:.1em}
+.card .front small,.card .back small{display:block;font-size:.72rem;color:var(--muted);font-weight:600;line-height:1.25}
+.card .front .vs{color:var(--ink)}
+.card .back{background:var(--c-bg);color:var(--c);border:2px solid var(--c);border-bottom-width:.2em;transform:rotateY(180deg)}
+.card .back em{color:var(--ink);font-weight:500;font-size:.85em}
+.card.on .front{transform:rotateY(-180deg)}
+.card.on .back{transform:rotateY(0)}
+
+/* Exercises */
+.task{font-size:1.15rem;margin:.3rem 0 .35rem;max-width:52em}
+.tip{font-size:.95rem;color:var(--muted);margin:0 0 1rem}
+.ex-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem 2rem}
+.it{display:grid;align-content:start;grid-template-columns:1.9rem minmax(0,1fr);gap:.15rem .7rem;padding:.6rem .8rem .7rem;border-radius:.7rem;cursor:pointer;background:var(--card);border:1px solid var(--line);transition:border-color .3s}
+.it:hover{border-color:#AEB9C4}
+.it:focus-visible{outline:3px solid var(--q);outline-offset:2px}
+.it .n{grid-row:1/3;display:grid;place-items:center;width:1.8rem;height:1.8rem;border-radius:50%;background:var(--soft);font-weight:700;font-size:.9rem;transition:background-color .3s}
+.it.on .n{background:var(--lime)}
+.it .q{font-size:1.12rem}
+.it .a{display:grid;font-size:1.12rem;margin-top:.2rem}
+.it .a > *{grid-area:1/1}
+.it .line{align-self:end;border-bottom:2px dotted #B7C2CC;height:1.5em;transition:opacity .3s}
+.it .sol{clip-path:inset(0 100% 0 0);opacity:0;transition:clip-path .8s cubic-bezier(.4,0,.2,1),opacity .2s}
+.it.on .sol{clip-path:inset(0);opacity:1}
+.it.on .line{opacity:0}
+.it .sol .note{display:block;font-size:.85rem;margin:.15rem 0 0;font-weight:600}
+.card.it{display:block;padding:0;border:0;background:none;border-radius:.6rem}
+.ex-list.sort .q{font-family:var(--serif);font-style:italic;font-size:1.15rem}
+.ex-list.sort .sol .m{font-family:var(--sans);font-style:normal}
+
+/* Structure blocks */
+.cols{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:2.2rem;align-items:start}
+.flow{display:grid;gap:.55rem}
+.blk{--c:var(--i);--cb:var(--i-bg);background:var(--card);border:1px solid var(--line);border-left:.45rem solid var(--c);border-radius:.3rem .7rem .7rem .3rem;padding:.55rem .95rem .65rem}
+.blk h4{font-size:1.05rem;color:var(--c);display:flex;justify-content:space-between;gap:1rem}
+.blk h4 small{color:var(--muted);font-weight:600;font-size:.8rem}
+.blk p{margin:.2rem 0 0}
+.blk .ex{display:block;font-family:var(--serif);font-style:italic;font-size:1.05rem;margin-top:.1rem}
+.sub{list-style:none;margin:.35rem 0 0;padding:0;display:grid;gap:.4rem}
+.sub li{padding:.35rem .6rem;border-radius:.5rem;background:var(--cb)}
+.sub li b{color:var(--c);font-size:.92rem}
+.blk.b-body{--c:var(--q);--cb:var(--q-bg)}
+.blk.b-weigh{--c:var(--s);--cb:var(--s-bg)}
+.blk.b-concl{--c:var(--t);--cb:var(--t-bg)}
+.arrow{justify-self:center;color:var(--muted);font-size:1.2rem;line-height:1;margin:-.15rem 0}
+.side{display:grid;gap:.8rem}
+.box{background:var(--card);border:1px solid var(--line);border-radius:.8rem;padding:.8rem 1rem}
+.box h3{margin-bottom:.4rem}
+.box ul{margin:0;padding-left:1.1rem}
+.box li{margin:.15rem 0}
+.redbox{background:var(--e-bg);border-color:transparent}
+.redbox p{margin:.25rem 0;font-weight:600}
+.redbox b{color:var(--e);font-size:1.25em}
+
+/* Argument builder */
+.weak{display:flex;gap:.8rem;align-items:baseline;background:var(--e-bg);border-radius:.7rem;padding:.6rem 1rem;margin-bottom:1rem}
+.weak .ex{font-family:var(--serif);font-style:italic;font-size:1.35rem}
+.weak small{color:var(--e);font-weight:700}
+.badge{display:inline-grid;place-items:center;flex:none;min-width:1.7rem;height:1.7rem;padding:0 .4rem;border-radius:.9rem;font-weight:800;font-size:.95rem}
+.badge.no{background:var(--e);color:#fff}
+.badge.yes{background:var(--c);color:#fff}
+.para{display:grid;gap:.5rem}
+.pl{display:grid;grid-template-columns:9.5rem minmax(0,1fr);gap:.8rem;align-items:start}
+.pl .lab{font-weight:700;font-size:.92rem;padding:.35rem .6rem;border-radius:.45rem;text-align:center}
+.pl .txt{font-family:var(--serif);font-size:1.32rem;line-height:1.35;padding:.2rem .5rem;border-radius:.4rem}
+.l-i .lab{background:var(--i);color:#fff} .l-i .txt{background:var(--i-bg)}
+.l-q .lab{background:var(--q);color:#fff} .l-q .txt{background:var(--q-bg)}
+.l-s .lab{background:var(--s);color:#fff} .l-s .txt{background:var(--s-bg)}
+.l-t .lab{background:var(--t);color:#fff} .l-t .txt{background:var(--t-bg)}
+
+/* Vague vs precise */
+.cmp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:.6rem 1.4rem;align-items:stretch}
+.cmp .cell{border-radius:.7rem;padding:.6rem .9rem;display:flex;gap:.7rem;align-items:flex-start}
+.cmp .bad{background:var(--e-bg)}
+.cmp .good{background:var(--c-bg)}
+.cmp .ex{font-family:var(--serif);font-style:italic;font-size:1.15rem;line-height:1.35}
+.cmp .why{display:block;font-family:var(--sans);font-style:normal;font-size:.85rem;font-weight:600;color:var(--muted);margin-top:.2rem}
+.cmp .hd{font-size:.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.phr{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.4rem}
+.phr span{background:var(--card);border:1.5px solid var(--line);border-radius:.45rem;padding:.15rem .55rem;font-weight:600;font-size:.98rem}
+
+/* Toolbox table */
+.tbx{width:100%;border-collapse:collapse;margin:.2rem 0 1rem}
+.tbx th,.tbx td{text-align:left;padding:.4rem .6rem;border-bottom:1px solid var(--line);vertical-align:top}
+.tbx th{width:12rem;font-size:.95rem;color:var(--muted)}
+.tbx td{font-weight:600}
+
+/* Checklist */
+.check{list-style:none;margin:.4rem 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem 1.6rem}
+.check li{display:grid;grid-template-columns:2rem minmax(0,1fr);gap:.6rem;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:.7rem;padding:.5rem .8rem}
+.check li::before{content:"✓";display:grid;place-items:center;width:1.7rem;height:1.7rem;border-radius:50%;background:var(--lime);font-weight:800}
+.check b{display:block}
+.check span{color:var(--muted);font-size:.98rem}
+
+/* Footer */
+.bar{display:flex;align-items:center;gap:.6rem;padding:.45rem clamp(16px,3vw,48px);background:var(--card);border-top:1px solid var(--line)}
+.pos{display:flex;gap:1rem;font-size:.85rem;color:var(--muted);margin-right:auto;margin-left:.6rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tools{display:flex;gap:.3rem}
+.btn{font:600 .9rem var(--sans);padding:.5em 1em;border-radius:.55em;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:#AEB9C4}
+.btn:focus-visible{outline:3px solid var(--q);outline-offset:2px}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:#fff;min-width:9.5em}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.ghost:hover{background:var(--soft)}
+kbd{font:600 .75rem var(--sans);border:1px solid var(--line);border-bottom-width:2px;border-radius:.3em;padding:0 .35em;background:var(--card)}
+
+@media (max-width: 900px){
+  .split,.cols,.ex-list,.startgrid,.cmp,.check{grid-template-columns:minmax(0,1fr)}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tools{display:none}
+  .btn.primary{min-width:0}
+  #stepNo{display:none}
+  .howto{position:static}
+  .tt,.gl,.pos kbd,.pos .keys{display:none}
+  .hero h1{font-size:2.1rem}
+  .w{font-size:1.2rem}
+  .brow{grid-template-columns:2.4rem 6.5rem minmax(0,1fr)}
+  .pl{grid-template-columns:minmax(0,1fr)}
+  .tbx th{width:auto}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important;transition-duration:0s !important;transition-delay:0s !important}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="topin">
+    <span class="tt"><b>EN31 · Exam 1</b> &nbsp;Common mistakes and how to get them right</span>
+    <nav id="prog" aria-label="Slides"></nav>
+  </div>
+</header>
+
+<main id="deck">
+
+<!-- 1 Start -->
+<section class="slide" data-part="Start" data-title="Start" data-kind="beats" data-cfg="start">
+  <div class="wrap hero">
+    <p class="station">Exam 1 · H. G. Wells, “The New Accelerator” · Summary and Discussion</p>
+    <h1>
+      <span class="w r-e" style="--d:0;--r:-1.5deg">Common</span>
+      <span class="w r-e" style="--d:1;--r:1deg">mistakes</span>
+      <span class="and">and how to</span>
+      <span class="w r-c" style="--d:3;--r:-.5deg">get them</span>
+      <span class="w r-c" style="--d:4;--r:1.5deg">right</span>
+    </h1>
+    <div class="startgrid">
+      <div>
+        <div class="stats rv" data-show="stats">
+          <div class="big"><span data-n="20">20</span><small>exams</small></div>
+          <div class="big"><span data-n="1500" data-pre="about ">about 1,500</span><small>marked mistakes</small></div>
+        </div>
+        <p class="ask rv" data-show="good">The good news: most of them are not difficult grammar but <em>basics</em>. You can avoid them if you proofread systematically.</p>
+      </div>
+      <div class="bars rv" data-show="bars">
+        <h3>What kind of mistakes?</h3>
+        <div class="brow" style="--w:100%;--d:0"><span class="k">R</span><span class="lb">Spelling</span><span class="track"><span class="fill"></span></span></div>
+        <div class="brow" style="--w:76.9%;--d:1"><span class="k">Gr</span><span class="lb">Grammar</span><span class="track"><span class="fill"></span></span></div>
+        <div class="brow" style="--w:68.4%;--d:2"><span class="k">Z</span><span class="lb">Punctuation</span><span class="track"><span class="fill"></span></span></div>
+        <div class="brow" style="--w:32.5%;--d:3"><span class="k">W</span><span class="lb">Wrong word</span><span class="track"><span class="fill"></span></span></div>
+        <div class="brow" style="--w:21.8%;--d:4"><span class="k">A</span><span class="lb">Expression</span><span class="track"><span class="fill"></span></span></div>
+        <div class="brow" style="--w:15.8%;--d:5"><span class="k">Pr</span><span class="lb">Preposition</span><span class="track"><span class="fill"></span></span></div>
+      </div>
+    </div>
+    <div class="agenda rv" data-show="agenda">
+      <div class="part"><span class="num">1</span><div><b>Language</b><span class="sub">verbs · spelling and capitals · punctuation · words</span></div></div>
+      <div class="part"><span class="num">2</span><div><b>Structure</b><span class="sub">the summary · the discussion · linking words</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 Tense in the summary -->
+<section class="slide" data-part="Verbs" data-title="Tense in the summary" data-kind="beats" data-cfg="tense">
+  <div class="wrap">
+    <h2>The summary is in the simple present</h2>
+    <p class="lead"><span class="stat">in <b>three out of four</b> exams</span> Many summaries told the story like a story: in the past.</p>
+    <div class="split">
+      <div class="scenes"></div>
+      <aside class="howto">
+        <h3>How it works</h3>
+        <ol class="rules">
+          <li>The plot of the text: <b>simple present</b> (drinks, sees, decide)</li>
+          <li>No progressive form: not <em>are taking</em>, but <em>take</em></li>
+          <li>Before the plot starts: <b>present perfect</b> (has invented)</li>
+          <li>Irregular verbs: check the form (sell – sold, sleep – slept, beat – beat – beaten)</li>
+        </ol>
+        <div class="merke rv" data-show="tip"><b>Proofreading tip</b><p>Underline every verb in your summary. Is it in the present?</p></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- 3 Verb forms -->
+<section class="slide" data-part="Verbs" data-title="Verb forms" data-kind="beats" data-cfg="verbs">
+  <div class="wrap">
+    <h2>Verb forms: -s, modal verbs, if-clauses</h2>
+    <p class="lead"><span class="stat">-s and agreement: <b>more than half</b> of you</span><span class="stat">modal verbs and if-clauses: <b>about a third</b> of you</span></p>
+    <div class="split">
+      <div class="scenes"></div>
+      <aside class="howto">
+        <h3>How it works</h3>
+        <ol class="rules">
+          <li>he, she, it: <b>-s</b>, <b>does</b>, <b>has</b></li>
+          <li>Find the real subject: <em>The possibilities of … <b>are</b></em></li>
+          <li>Modal verb + <b>base form</b>: can speed, might be</li>
+          <li>No <b>would</b> in the if-clause</li>
+        </ol>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- 4 Exercise 1 -->
+<section class="slide" data-part="Verbs" data-title="Exercise 1" data-kind="items">
+  <div class="wrap">
+    <div class="ex-head"><h2>Exercise 1: Fix the verbs</h2><button class="btn all" data-a="Show all answers" data-b="Hide answers">Show all answers</button></div>
+    <p class="task">Each sentence has one or two wrong verb forms. Write the correct sentences in your exercise book.</p>
+    <p class="tip">Sentences 1, 2 and 7 come from a summary.</p>
+    <ol class="ex-list" data-ex="verbs"></ol>
+  </div>
+</section>
+
+<!-- 5 Spelling: words -->
+<section class="slide" data-part="Spelling" data-title="Words to get right" data-kind="items" data-unit="Card">
+  <div class="wrap">
+    <div class="ex-head"><h2>Words you must get right</h2><button class="btn all" data-a="Turn all cards" data-b="Turn cards back">Turn all cards</button></div>
+    <p class="lead"><span class="stat">spelling mistakes in <b>every</b> exam</span> These came up again and again. How do you spell them correctly? Guess first, then turn the card.</p>
+    <div class="cards" data-cards="spell"></div>
+    <div class="merke"><b>Remember</b><p>Names and titles are on the task sheet: <em>Gibberne, the New Accelerator, H. G. Wells</em>. Copy them correctly.</p></div>
+  </div>
+</section>
+
+<!-- 6 Endings -->
+<section class="slide" data-part="Spelling" data-title="Endings" data-kind="beats" data-cfg="endings">
+  <div class="wrap">
+    <h2>Endings: -ies, -ves, -ed</h2>
+    <p class="lead"><span class="stat">plural endings: <b>more than half</b> of you</span><span class="stat">-ed: <b>almost half</b> of you</span></p>
+    <div class="split">
+      <div class="scenes"></div>
+      <aside class="howto">
+        <h3>How it works</h3>
+        <ol class="rules">
+          <li>Consonant + y → <b>-ies</b> (but vowel + y: days, ways)</li>
+          <li>f / fe → <b>-ves</b>: lives, halves</li>
+          <li>Regular verbs: always <b>-ed</b>, never -d or -t</li>
+        </ol>
+        <div class="merke rv" data-show="apo"><b>And</b><p>No apostrophe in the plural: <em>possibilities</em>, not <em>possibility’s</em>.</p></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- 7 Capitals -->
+<section class="slide" data-part="Spelling" data-title="Capital letters" data-kind="beats" data-cfg="caps">
+  <div class="wrap">
+    <h2>Capital letters: English is not German</h2>
+    <p class="lead"><span class="stat">in <b>almost every</b> exam</span> English nouns are small. But some words are always capitalised.</p>
+    <div class="split">
+      <div class="scenes"></div>
+      <aside class="howto">
+        <h3>How it works</h3>
+        <ol class="rules">
+          <li>Nouns are small: text, narrator, humans, generation</li>
+          <li>Nationalities and names: capital (Americans, Native Americans, Soviet)</li>
+          <li>Titles: capitals for the important words; short stories and speeches in quotation marks</li>
+          <li>Title + name: <em>Professor Gibberne</em> – but: <em>the professor</em></li>
+        </ol>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- 8 Exercise 2 -->
+<section class="slide" data-part="Spelling" data-title="Exercise 2" data-kind="items">
+  <div class="wrap">
+    <div class="ex-head"><h2>Exercise 2: Spelling check</h2><button class="btn all" data-a="Show all answers" data-b="Hide answers">Show all answers</button></div>
+    <p class="task">Each sentence has <b>two</b> mistakes: spelling or capital letters. Find them and correct them.</p>
+    <p class="tip">Think of the endings and of German habits.</p>
+    <ol class="ex-list" data-ex="spell"></ol>
+  </div>
+</section>
+
+<!-- 9 Apostrophes -->
+<section class="slide" data-part="Punctuation" data-title="Apostrophes" data-kind="beats" data-cfg="apos">
+  <div class="wrap">
+    <h2>Apostrophes</h2>
+    <p class="lead"><span class="stat">in <b>two out of three</b> exams</span> Apostrophes were missing where they are needed and appeared where they are not allowed.</p>
+    <div class="split">
+      <div class="scenes"></div>
+      <aside class="howto">
+        <h3>How it works</h3>
+        <ol class="rules">
+          <li><b>it’s</b> = it is · <b>its</b> = possessive</li>
+          <li>Plural: no apostrophe (humans, possibilities)</li>
+          <li>Verbs: no apostrophe (feels, starts, lets)</li>
+          <li>Possession: Turner’s, the narrator’s, the settlers’</li>
+          <li>Formal text: full forms (cannot, does not, it is)</li>
+        </ol>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- 10 Commas -->
+<section class="slide" data-part="Punctuation" data-title="Commas" data-kind="beats" data-cfg="commas">
+  <div class="wrap">
+    <h2>Commas: English rules, not German ones</h2>
+    <p class="lead"><span class="stat">commas too many: <b>most</b> of you</span><span class="stat">commas missing: <b>everyone</b></span> English needs fewer commas than German – but in other places.</p>
+    <div class="split">
+      <div class="scenes"></div>
+      <aside class="howto">
+        <h3>How it works</h3>
+        <ol class="rules">
+          <li>No comma before <b>that</b> (if, what, how)</li>
+          <li>No comma between subject and verb</li>
+          <li>Defining relative clause: no comma</li>
+          <li>Extra information: <b>two</b> commas</li>
+          <li>After introductory words and clauses: comma</li>
+        </ol>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- 11 Sentence boundaries -->
+<section class="slide" data-part="Punctuation" data-title="Where a sentence ends" data-kind="beats" data-cfg="bounds">
+  <div class="wrap">
+    <h2>Where does a sentence end?</h2>
+    <p class="lead"><span class="stat">two main clauses with a comma: <b>half</b> of you</span><span class="stat">sentences without a main clause: <b>more than half</b> of you</span></p>
+    <div class="split">
+      <div class="scenes"></div>
+      <aside class="howto">
+        <h3>How it works</h3>
+        <ol class="rules">
+          <li>Two main clauses: full stop, semicolon or linking word – not just a comma</li>
+          <li>Every sentence needs a subject and a verb</li>
+          <li><em>because</em>, <em>although</em> and <em>if</em> clauses cannot stand alone</li>
+        </ol>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- 12 Exercise 3 -->
+<section class="slide" data-part="Punctuation" data-title="Exercise 3" data-kind="items">
+  <div class="wrap">
+    <div class="ex-head"><h2>Exercise 3: Punctuation</h2><button class="btn all" data-a="Show all answers" data-b="Hide answers">Show all answers</button></div>
+    <p class="task">Correct the punctuation. Some commas or apostrophes are missing, some are wrong.</p>
+    <p class="tip">Two sentences only need a new comma.</p>
+    <ol class="ex-list" data-ex="punct"></ol>
+  </div>
+</section>
+
+<!-- 13 Articles -->
+<section class="slide" data-part="Words" data-title="Articles" data-kind="beats" data-cfg="arts">
+  <div class="wrap">
+    <h2>Articles and uncountable nouns</h2>
+    <p class="lead"><span class="stat">articles: <b>almost everyone</b></span><span class="stat">uncountable nouns: <b>half</b> of you</span></p>
+    <div class="split">
+      <div class="scenes"></div>
+      <aside class="howto">
+        <h3>How it works</h3>
+        <ol class="rules">
+          <li>General meaning: no article (society, people, human progress, technology)</li>
+          <li>Uncountable: no <em>a</em>, no plural (progress, information, homework)</li>
+          <li><b>a</b> or <b>an</b>: it depends on the sound</li>
+          <li><b>fewer</b> + countable · <b>less</b> + uncountable</li>
+        </ol>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- 14 Adverbs, word order, pronouns -->
+<section class="slide" data-part="Words" data-title="Adverbs and word order" data-kind="beats" data-cfg="adv">
+  <div class="wrap">
+    <h2>Adverbs, word order, pronouns</h2>
+    <p class="lead"><span class="stat">adverbs: <b>two out of three</b></span><span class="stat">word order: <b>more than half</b></span><span class="stat">pronouns: <b>half</b> of you</span></p>
+    <div class="split">
+      <div class="scenes"></div>
+      <aside class="howto">
+        <h3>How it works</h3>
+        <ol class="rules">
+          <li>How? → adverb (slowly, quickly, well)</li>
+          <li><b>also</b> and <b>not</b> after the first auxiliary</li>
+          <li>After <em>Moreover</em> or <em>Furthermore</em>: normal word order</li>
+          <li>Pronouns must match: technologies → <b>they</b></li>
+        </ol>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- 15 False friends -->
+<section class="slide" data-part="Words" data-title="Wrong words" data-kind="items" data-unit="Card">
+  <div class="wrap">
+    <div class="ex-head"><h2>False friends and wrong words</h2><button class="btn all" data-a="Turn all cards" data-b="Turn cards back">Turn all cards</button></div>
+    <p class="lead"><span class="stat">wrong words and expressions in <b>almost every</b> exam</span> Many of them are translated word for word from German. What is the right word?</p>
+    <div class="cards tall" data-cards="ff"></div>
+  </div>
+</section>
+
+<!-- 16 Prepositions -->
+<section class="slide" data-part="Words" data-title="Prepositions" data-kind="items">
+  <div class="wrap">
+    <div class="ex-head"><h2>Prepositions</h2><button class="btn all" data-a="Show all answers" data-b="Hide answers">Show all answers</button></div>
+    <p class="lead"><span class="stat">in <b>almost every</b> exam</span> Which preposition is missing? All of them were wrong in your exams.</p>
+    <ol class="ex-list" data-ex="prep"></ol>
+  </div>
+</section>
+
+<!-- 17 Exercise 4 -->
+<section class="slide" data-part="Words" data-title="Exercise 4" data-kind="items">
+  <div class="wrap">
+    <div class="ex-head"><h2>Exercise 4: Find the mistake</h2><button class="btn all" data-a="Show all answers" data-b="Hide answers">Show all answers</button></div>
+    <p class="task">Each sentence has exactly one mistake: an article, a word, the word order or a pronoun. Correct it.</p>
+    <p class="tip">Write the correct sentences in your exercise book.</p>
+    <ol class="ex-list" data-ex="words"></ol>
+  </div>
+</section>
+
+<!-- 18 Summary: first sentence -->
+<section class="slide" data-part="Summary" data-title="The first sentence" data-kind="beats" data-cfg="intro">
+  <div class="wrap">
+    <h2>The summary: your first sentence</h2>
+    <p class="lead"><span class="stat">only <b>a quarter</b> of you named the text type</span> <em>text</em>, <em>extract</em> or <em>abridged extract</em> are not text types. “The New Accelerator” is a <b>short story</b>.</p>
+    <div class="split">
+      <div>
+        <div class="scenes"></div>
+        <div class="merke rv" data-show="alt"><b>Another way to start</b><p class="mk">“The New Accelerator”{c:,} a short story by H. G. Wells published in 1901{c:,} is about …</p><p class="note">The extra information goes between <b>two</b> commas – many of you forgot the second one.</p></div>
+      </div>
+      <aside class="howto">
+        <h3>The first sentence names</h3>
+        <ol class="rules">
+          <li>the text type</li>
+          <li>the title</li>
+          <li>the author</li>
+          <li>the year</li>
+          <li>the topic – of the whole text</li>
+        </ol>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- 19 Summary: in or out -->
+<section class="slide" data-part="Summary" data-title="In or out?" data-kind="items">
+  <div class="wrap">
+    <div class="ex-head"><h2>The summary: in or out?</h2><button class="btn all" data-a="Show all answers" data-b="Hide answers">Show all answers</button></div>
+    <p class="lead"><span class="stat">often missing: nobody knows how long the effect lasts</span><span class="stat">only <b>a quarter</b> of you: the ending in full</span> A summary condenses the text. Does the sentence belong in a summary? Decide first, then click.</p>
+    <ol class="ex-list sort" data-ex="sort"></ol>
+  </div>
+</section>
+
+<!-- 20 Discussion: structure -->
+<section class="slide" data-part="Discussion" data-title="Structure" data-kind="beats" data-cfg="struct">
+  <div class="wrap">
+    <h2>The discussion: a clear structure</h2>
+    <p class="lead">Task: <em>Discuss whether overcoming human limitations through science and technology should be considered a new frontier of human progress.</em></p>
+    <div class="cols">
+      <div class="flow">
+        <div class="blk">
+          <h4>Introduction <small>D1</small></h4>
+          <ol class="sub">
+            <li class="rv" data-show="in1"><b>Lead-in</b><span class="ex">Today, technology promises to make us faster, smarter and perhaps even immortal.</span></li>
+            <li class="rv" data-show="in2"><b>The question in your own words</b><span class="ex">But should pushing our human limits really be seen as a new frontier of progress?</span></li>
+            <li class="rv" data-show="in3"><b>Explain “frontier” as an image</b><span class="ex">For Turner, the frontier was the line between settled land and the wilderness that Americans kept pushing west. Today, the limits of the human body and mind could be such a frontier.</span></li>
+            <li class="rv" data-show="in4"><b>Your criterion for progress</b><span class="ex">In my view, a development is only progress if it makes life better and safer for many people, not just faster for a few.</span></li>
+          </ol>
+        </div>
+        <span class="arrow rv" data-show="body">▼</span>
+        <div class="blk b-body rv" data-show="body">
+          <h4>Main part <small>D2 · D3 · D4 · D5</small></h4>
+          <ul class="sub">
+            <li><b>Arguments for</b> – two or three, each one developed</li>
+            <li><b>Arguments against</b> – two or three, developed; include the responsibility for the consequences</li>
+            <li><b>Evidence</b> from the extract and from at least one work from class</li>
+          </ul>
+        </div>
+        <span class="arrow rv" data-show="weigh">▼</span>
+        <div class="blk b-weigh rv" data-show="weigh">
+          <h4>Weighing <small>D6</small></h4>
+          <p>Which side is stronger – and why? Use your criterion from the introduction.</p>
+        </div>
+        <span class="arrow rv" data-show="concl">▼</span>
+        <div class="blk b-concl rv" data-show="concl">
+          <h4>Conclusion <small>D6</small></h4>
+          <p>A clear answer to the question of the task. No new arguments – and not just <em>“there are pros and cons”</em>.</p>
+        </div>
+      </div>
+      <div class="side">
+        <div class="box redbox rv" data-show="stat">
+          <p><b>Less than half</b> of you explained “frontier”.</p>
+          <p><b>Only a quarter</b> of you named a criterion for progress.</p>
+          <p><b>Two</b> exams had no conclusion at all.</p>
+        </div>
+        <div class="box">
+          <h3>Works from class</h3>
+          <ul>
+            <li>Turner, “The Significance of the Frontier in American History” (1893)</li>
+            <li>Kennedy, “We Choose to Go to the Moon” (1962)</li>
+            <li>Ken Liu, “Staying Behind” (2011)</li>
+            <li><em>Black Mirror</em>, “The Entire History of You”</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 21 Discussion: argument -->
+<section class="slide" data-part="Discussion" data-title="Developing an argument" data-kind="beats" data-cfg="arg">
+  <div class="wrap">
+    <h2>From a point to an argument</h2>
+    <p class="lead">Many arguments were only <em>named</em>, not <em>developed</em>. A named argument gets one point at most.</p>
+    <div class="weak"><span class="badge no">✗</span><div><span class="ex">Another disadvantage is crime.</span><br><small>only named – no explanation, no evidence</small></div></div>
+    <div class="para">
+      <div class="pl l-i rv" data-show="c1"><span class="lab">Claim</span><span class="txt">One serious risk is that a drug like the Accelerator could be used for crimes.</span></div>
+      <div class="pl l-q rv" data-show="c2"><span class="lab">Explanation</span><span class="txt">Since its users would move a thousand times faster than everyone else, nobody could see them, let alone stop them.</span></div>
+      <div class="pl l-s rv" data-show="c3"><span class="lab">Evidence</span><span class="txt">Wells’ narrator even admits that crimes could be committed “with impunity”, yet he and Gibberne decide to sell the drug anyway.</span></div>
+      <div class="pl l-t rv" data-show="c4"><span class="lab">Link</span><span class="txt">This shows that overcoming human limits is only progress if someone takes responsibility for the consequences.</span></div>
+    </div>
+    <div class="merke rv" data-show="formula"><b>Pattern</b>
+      <div class="formula"><span class="w sm r-i">Claim</span><span class="plus">+</span><span class="w sm r-q">Explanation</span><span class="plus">+</span><span class="w sm r-s">Evidence</span><span class="plus">+</span><span class="w sm r-t">Link to the question</span></div>
+      <p class="note">Evidence: the extract (precise!) or one of the works from class.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 22 Discussion: evidence -->
+<section class="slide" data-part="Discussion" data-title="Using the text" data-kind="beats" data-cfg="evid">
+  <div class="wrap">
+    <h2>Using the extract as evidence</h2>
+    <p class="lead"><span class="stat">text work: the <b>weakest</b> part</span> The ending of the extract is your strongest evidence – and hardly anyone used it.</p>
+    <div class="cmp">
+      <span class="hd">Vague</span><span class="hd">Precise</span>
+      <div class="cell bad rv" data-show="r1"><span class="badge no">✗</span><span class="ex">As in the story, criminals could use it.</span></div>
+      <div class="cell good rv" data-show="r1b"><span class="badge yes">✓</span><span class="ex">The narrator himself admits that the drug would allow crimes to be committed “with impunity”.<span class="why">Who says it? What exactly does the text say?</span></span></div>
+      <div class="cell bad rv" data-show="r2"><span class="badge no">✗</span><span class="ex">The text shows that the drug makes people happy.</span></div>
+      <div class="cell good rv" data-show="r2b"><span class="badge yes">✓</span><span class="ex">Looking at the frozen crowd, the narrator feels “an exultant sense of superior advantage” – the drug makes him feel superior to others.<span class="why">Quote or precise paraphrase – then explain what it shows.</span></span></div>
+      <div class="cell bad rv" data-show="r3"><span class="badge no">✗</span><span class="ex">Wells thinks that selling the drug is fine.</span></div>
+      <div class="cell good rv" data-show="r3b"><span class="badge yes">✓</span><span class="ex">The two men decide to sell the drug and leave the consequences to others: “as for the consequences – we shall see.” This careless ending suggests that the text criticises their attitude.<span class="why">Keep apart: what the characters think – what the text suggests – what you think.</span></span></div>
+    </div>
+    <div class="merke rv" data-show="tools"><b>Useful phrases</b>
+      <div class="phr"><span>As the narrator admits, …</span><span>Gibberne claims that …</span><span>The ending shows that …</span><span>This suggests that …</span><span>Unlike the characters, I think …</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 23 Discussion: weighing and conclusion -->
+<section class="slide" data-part="Discussion" data-title="Weighing and conclusion" data-kind="beats" data-cfg="concl">
+  <div class="wrap">
+    <h2>Weighing and conclusion</h2>
+    <p class="lead"><span class="stat">weighing and judgement: <b>less than half</b> of the points on average</span> The end of your discussion must answer the question.</p>
+    <div class="scenes"></div>
+    <div class="para" style="margin-top:1rem">
+      <div class="pl l-i rv" data-show="k1"><span class="lab">Criterion</span><span class="txt">If progress means a better and safer life for many people, …</span></div>
+      <div class="pl l-s rv" data-show="k2"><span class="lab">Weighing</span><span class="txt">… the risks outweigh the benefits, because a drug like the Accelerator would give a few people power over everyone else.</span></div>
+      <div class="pl l-t rv" data-show="k3"><span class="lab">Judgement</span><span class="txt">Therefore, overcoming human limitations is a new frontier of progress only if its consequences can be controlled.</span></div>
+    </div>
+    <div class="merke rv" data-show="tools"><b>Useful phrases</b>
+      <div class="phr"><span>The strongest argument is …</span><span>Although …, … is more important.</span><span>… outweigh(s) …</span><span>On balance, …</span><span>In conclusion, I believe that …</span></div>
+      <p class="note">No new arguments in the conclusion.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 24 Linking words: traps -->
+<section class="slide" data-part="Linking words" data-title="Linking words: traps" data-kind="items" data-unit="Card">
+  <div class="wrap">
+    <div class="ex-head"><h2>Linking words: say what you mean</h2><button class="btn all" data-a="Turn all cards" data-b="Turn cards back">Turn all cards</button></div>
+    <p class="lead">Linking words structure your text – but only if they mean what you want to say. Which one is right? Decide, then turn the card.</p>
+    <div class="cards c2 xtall" data-cards="link"></div>
+  </div>
+</section>
+
+<!-- 25 Exercise 5 -->
+<section class="slide" data-part="Linking words" data-title="Exercise 5" data-kind="items">
+  <div class="wrap">
+    <div class="ex-head"><h2>Exercise 5: Choose the linking word</h2><button class="btn all" data-a="Show all answers" data-b="Hide answers">Show all answers</button></div>
+    <p class="task">Fill in a suitable linking word. The table helps you.</p>
+    <table class="tbx">
+      <tr><th>adding</th><td>Moreover, · Furthermore, · In addition, · Firstly, … Secondly, … Finally,</td></tr>
+      <tr><th>contrasting</th><td>However, · On the other hand, · On the contrary, · although · whereas</td></tr>
+      <tr><th>cause and effect</th><td>because · since · Therefore, · Consequently, · As a result,</td></tr>
+      <tr><th>time</th><td>At first, · Then · Afterwards, · In the end, · At last</td></tr>
+      <tr><th>concluding</th><td>All in all, · In conclusion, · On balance, · After all (= remember that …)</td></tr>
+    </table>
+    <ol class="ex-list" data-ex="link"></ol>
+  </div>
+</section>
+
+<!-- 26 Checklist -->
+<section class="slide" data-part="Wrap-up" data-title="Checklist" data-kind="beats" data-cfg="check">
+  <div class="wrap">
+    <h2>Before you hand in: your checklist</h2>
+    <p class="lead">Plan ten minutes for proofreading. Read your text several times – each time with one question in mind.</p>
+    <ol class="check">
+      <li class="rv" data-show="l1"><div><b>Verbs</b><span>Summary in the simple present? -s with he, she, it? Base form after modal verbs?</span></div></li>
+      <li class="rv" data-show="l2"><div><b>Spelling</b><span>Names and title copied correctly? -ies, -ves, -ed?</span></div></li>
+      <li class="rv" data-show="l3"><div><b>Capital letters</b><span>Nouns small? Nationalities, names and titles capital?</span></div></li>
+      <li class="rv" data-show="l4"><div><b>Apostrophes</b><span>it’s or its? No apostrophe in plurals and verbs?</span></div></li>
+      <li class="rv" data-show="l5"><div><b>Commas and full stops</b><span>No comma before that or between subject and verb? Every sentence with subject and verb?</span></div></li>
+      <li class="rv" data-show="l6"><div><b>Words</b><span>commit crimes, the drug, the first-person narrator, pros and cons – no German words?</span></div></li>
+      <li class="rv" data-show="l7"><div><b>Summary</b><span>Text type, title, author, year, topic? Own words, no quotes, no opinion – and the ending?</span></div></li>
+      <li class="rv" data-show="l8"><div><b>Discussion</b><span>“Frontier” explained, criterion, developed arguments with evidence, weighing, clear judgement?</span></div></li>
+    </ol>
+    <div class="merke rv" data-show="task"><b>Your task</b><p>Look at your own exam. Choose your three most frequent kinds of mistakes. For each one, write down one example from your text and the correct version.</p></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="bar">
+  <button class="btn" id="prev">Back</button>
+  <div class="pos"><span id="slideNo"></span><span id="stepNo"></span><span class="keys"><kbd>←</kbd> <kbd>→</kbd> or space bar</span></div>
+  <div class="tools">
+    <button class="btn ghost" id="reset" title="Start this slide again (R)">Restart slide</button>
+    <button class="btn ghost" id="smaller" aria-label="Smaller text" title="Smaller text (-)">A−</button>
+    <button class="btn ghost" id="bigger" aria-label="Larger text" title="Larger text (+)">A+</button>
+    <button class="btn ghost" id="fs" title="Full screen (F)">Full screen</button>
+  </div>
+  <button class="btn primary" id="next">Next</button>
+</footer>
+
+<script>
+(() => {
+'use strict';
+
+/* ---------- Content ---------- */
+
+// Scenes: t = word tiles {id: [text, role]}, s = steps (o = order, set = changes, r = rules, hop = jumps, pulse)
+// Roles: e = mistake, c = correct, p / pe / pc = punctuation (neutral / wrong / correct), n = neutral,
+// i q s v t z = colours for parts of a sentence, g = crossed out
+const CFG = {
+  start: { after: ['stats', 'bars', 'good', 'agenda'] },
+  tense: {
+    scenes: [
+      { id: 't1', start0: true, lbl: 'From your exams',
+        t: { n: ['The narrator', 'n'], d: ['drank', 'e'], a: ['the Accelerator', 'n'], and: ['and', 'n'], f: ['felt', 'e'], no: ['nothing at first', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'n d a and f no dot', cap: 'Past tense – as if you were telling the story yourself.' },
+          { set: { d: ['drinks', 'c'] }, cap: 'Summary: simple present. drank → <b>drinks</b>', r: [0] },
+          { set: { f: ['feels', 'c'] }, cap: 'felt → <b>feels</b>', r: [0] }
+        ] },
+      { id: 't2', lbl: 'From your exams',
+        t: { th: ['The two men', 'n'], at: ['are taking', 'e'], dr: ['the drug', 'n'], and: ['and', 'n'], ag: ['are going', 'e'], out: ['out through the window', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'th at dr and ag out dot', cap: 'The progressive form – also wrong here.' },
+          { set: { at: ['take', 'c'] }, cap: 'The plot: simple present, no -ing. are taking → <b>take</b>', r: [1] },
+          { set: { ag: ['go', 'c'] }, cap: 'are going → <b>go</b>', r: [1] }
+        ] },
+      { id: 't3', lbl: 'From your exams',
+        t: { g: ['Professor Gibberne', 'n'], hi: ['had invented', 'e'], s: ['a new drug', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'g hi s dot', cap: 'This happened before the plot starts.' },
+          { set: { hi: ['has invented', 'c'] }, cap: 'Before the plot: present perfect. had invented → <b>has invented</b>', r: [2] }
+        ] },
+      { id: 't4', lbl: 'From your exams',
+        t: { h: ['His heart', 'n'], b: ['beated', 'e'], t: ['a thousand times a second', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'h b t dot', cap: 'Two problems in one word.' },
+          { set: { b: ['beats', 'c'] }, cap: 'Present tense: <b>beats</b>. And the past of beat is beat, not beated.', r: [3] }
+        ] }
+    ],
+    after: ['tip']
+  },
+  verbs: {
+    scenes: [
+      { id: 'a1', start0: true, lbl: 'he, she, it',
+        t: { n: ['The narrator', 's'], d: ['do not', 'e'], f: ['feel', 'n'], an: ['any discomfort', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'n d f an dot', cap: 'The narrator = he.' },
+          { set: { d: ['does not', 'c'] }, cap: 'he, she, it → <b>does</b> not', r: [0] }
+        ] },
+      { id: 'a2', lbl: 'Find the subject',
+        t: { p: ['The possibilities', 'n'], o: ['of this drug', 'n'], i: ['is', 'e'], f: ['fascinating', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'p o i f dot', cap: 'What is the subject: the drug?' },
+          { set: { p: ['The possibilities', 's'] }, pulse: 'p', cap: 'No – the subject is <b>possibilities</b>: plural.', r: [1] },
+          { set: { i: ['are', 'c'] }, cap: 'is → <b>are</b>', r: [1] }
+        ] },
+      { id: 'a3', lbl: 'Modal verbs',
+        t: { d: ['The drug', 'n'], c: ['can', 'v'], s: ['speeds', 'e'], u: ['up body and mind', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'd c s u dot', cap: 'A modal verb – and then?' },
+          { set: { s: ['speed', 'c'] }, cap: 'After <b>can, could, might, must, will, would</b>: base form. (Also: might <b>be</b>, not might are.)', r: [2] }
+        ] },
+      { id: 'a4', lbl: 'if-clauses',
+        t: { if: ['If', 'q'], pe: ['people', 'n'], wu: ['would use', 'e'], it: ['it for crimes', 'n'], cm: [',', 'p'], no: ['nobody', 'n'], co: ['could', 'v'], st: ['stop them', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'if pe wu it cm no co st dot', cap: 'An if-clause with <b>would</b>?' },
+          { set: { wu: ['used', 'c'] }, cap: 'No <b>would</b> in the if-clause: If people <b>used</b> it …, nobody <b>could</b> stop them.', r: [3] }
+        ] }
+    ]
+  },
+  endings: {
+    scenes: [
+      { id: 'e1', start0: true, lbl: 'Plural', tight: true,
+        t: { b: ['technolog', 'n'], e: ['ys', 'e'] },
+        s: [
+          { o: 'b e', cap: 'technologys?' },
+          { set: { e: ['ies', 'c'] }, cap: 'Consonant + y → <b>-ies</b>: technologies, possibilities, abilities, opportunities, bodies', r: [0] }
+        ] },
+      { id: 'e2', lbl: 'Plural', tight: true,
+        t: { b: ['li', 'n'], e: ['fes', 'e'] },
+        s: [
+          { o: 'b e', cap: 'lifes?' },
+          { set: { e: ['ves', 'c'] }, cap: 'f / fe → <b>-ves</b>: life – lives, half – halves', r: [1] }
+        ] },
+      { id: 'e3', lbl: 'Past tense', tight: true,
+        t: { b: ['happen', 'n'], e: ['d', 'e'] },
+        s: [
+          { o: 'b e', cap: 'happend?' },
+          { set: { e: ['ed', 'c'] }, cap: 'Always <b>-ed</b>: happened, considered, discovered', r: [2] }
+        ] },
+      { id: 'e4', lbl: 'Past tense', tight: true,
+        t: { b: ['develop', 'n'], e: ['et', 'e'] },
+        s: [
+          { o: 'b e', cap: 'developet? That is a German ending.' },
+          { set: { e: ['ed', 'c'] }, cap: 'Never <b>-et</b> or <b>-t</b>: developed, invented, interested', r: [2] }
+        ] }
+    ],
+    after: ['apo']
+  },
+  caps: {
+    scenes: [
+      { id: 'c1', start0: true, lbl: 'From your exams',
+        t: { in: ['In the', 'n'], tx: ['Text', 'e'], cm: [',', 'p'], th: ['the', 'n'], na: ['Narrator', 'e'], fe: ['feels superior to other', 'n'], hu: ['Humans', 'e'], dot: ['.', 'p'] },
+        s: [
+          { o: 'in tx cm th na fe hu dot', cap: 'A German habit: nouns with capital letters.' },
+          { set: { tx: ['text', 'c'], na: ['narrator', 'c'], hu: ['humans', 'c'] }, cap: 'In English, nouns are small.', r: [0] }
+        ] },
+      { id: 'c2', lbl: 'From your exams',
+        t: { k: ['Kennedy wanted the', 'n'], am: ['americans', 'e'], tb: ['to beat the', 'n'], so: ['sowjet', 'e'], un: ['Union', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'k am tb so un dot', cap: 'Two mistakes.' },
+          { set: { am: ['Americans', 'c'], so: ['Soviet', 'c'] }, cap: 'Nationalities: always capital. And it is <b>Soviet</b>.', r: [1] }
+        ] },
+      { id: 'c3', lbl: 'Titles',
+        t: { in: ['In', 'n'], bm: ['black mirror', 'e'], an: ['and', 'n'], sb: ['staying behind', 'e'], cm: [',', 'p'], re: ['technology changes how people deal with the past', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'in bm an sb cm re dot', cap: 'What is wrong with the titles?' },
+          { set: { bm: ['Black Mirror', 'c'] }, cap: 'Titles: capitals for the important words.', r: [2] },
+          { set: { sb: ['“Staying Behind”', 'c'] }, cap: 'A short story: in quotation marks.', r: [2] }
+        ] },
+      { id: 'c4', lbl: 'Title + name',
+        t: { p: ['professor', 'e'], g: ['Gibberne', 'n'], tk: ['takes the drug first. The', 'n'], p2: ['Professor', 'e'], is: ['is not afraid', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'p g tk p2 is dot', cap: 'Capital or small?' },
+          { set: { p: ['Professor', 'c'] }, cap: 'Title + name: <b>Professor Gibberne</b>', r: [3] },
+          { set: { p2: ['professor', 'c'] }, cap: 'Without the name: <b>the professor</b>', r: [3] }
+        ] }
+    ]
+  },
+  apos: {
+    scenes: [
+      { id: 'p1', start0: true, lbl: 'it’s or its?',
+        t: { i1: ['Its', 'e'], a: ['a fascinating idea', 'n'], cm: [',', 'p'], b: ['but', 'n'], i2: ['its', 'n'], ef: ['effects are unclear', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'i1 a cm b i2 ef dot', cap: 'Twice <b>its</b> – which one is wrong?' },
+          { set: { i1: ['It’s', 'c'] }, cap: '<b>It’s</b> = it is', r: [0] },
+          { set: { i2: ['its', 'c'] }, pulse: 'i2', cap: '<b>its</b> = possessive (the effects of the idea) – no apostrophe!', r: [0] }
+        ] },
+      { id: 'p2', lbl: 'Plural',
+        t: { m: ['Many', 'n'], h: ['human’s', 'e'], dr: ['dream of new', 'n'], p: ['possibility’s', 'e'], dot: ['.', 'p'] },
+        s: [
+          { o: 'm h dr p dot', cap: 'An apostrophe in the plural?' },
+          { set: { h: ['humans', 'c'], p: ['possibilities', 'c'] }, cap: 'Plural: <b>never</b> an apostrophe.', r: [1] }
+        ] },
+      { id: 'p3', lbl: 'Verbs',
+        t: { h: ['He', 'n'], f: ['feel’s', 'e'], l: ['light and', 'n'], s: ['start’s', 'e'], t: ['to move', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'h f l s t dot', cap: 'And in verbs?' },
+          { set: { f: ['feels', 'c'], s: ['starts', 'c'] }, cap: 'he, she, it + -s: <b>never</b> an apostrophe.', r: [2] }
+        ] },
+      { id: 'p4', lbl: 'Possession',
+        t: { t: ['Turners', 'e'], th: ['thesis explains the', 'n'], s: ['settlers', 'e'], c: ['character', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 't th s c dot', cap: 'Whose thesis? Whose character?' },
+          { set: { t: ['Turner’s', 'c'] }, cap: 'Possession: <b>’s</b>', r: [3] },
+          { set: { s: ['settlers’', 'c'] }, cap: 'Plural ending in -s: <b>s’</b>', r: [3] }
+        ] },
+      { id: 'p5', lbl: 'Short forms',
+        t: { th: ['They', 'n'], c: ['cant', 'e'], st: ['stop the effect', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'th c st dot', cap: 'cant?' },
+          { set: { c: ['can’t', 'z'] }, cap: 'Short forms need an apostrophe …' },
+          { set: { c: ['cannot', 'c'] }, cap: '… but in an exam text, write the full form: <b>cannot</b>, does not, it is.', r: [4] }
+        ] }
+    ]
+  },
+  commas: {
+    scenes: [
+      { id: 'k1', start0: true, lbl: 'that',
+        t: { g: ['Gibberne explains', 'n'], cm: [',', 'pe'], th: ['that', 'q'], gl: ['the glass is still falling', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'g cm th gl dot', cap: 'A German comma.' },
+          { o: 'g th gl dot', cap: 'No comma before <b>that</b> – and none before if, whether, what or how.', r: [0] }
+        ] },
+      { id: 'k2', lbl: 'Subject and verb',
+        t: { a: ['The New Accelerator', 's'], cm: [',', 'pe'], c: ['can be dangerous', 'v'], dot: ['.', 'p'] },
+        s: [
+          { o: 'a cm c dot', cap: 'A comma after a long subject?' },
+          { o: 'a c dot', cap: 'Never a comma between subject and verb.', r: [1] }
+        ] },
+      { id: 'k3', lbl: 'Defining relative clause',
+        t: { a: ['They invent a substance', 'n'], cm: [',', 'pe'], th: ['that', 'q'], sp: ['speeds up the body', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'a cm th sp dot', cap: 'Which substance? The one that speeds up the body.' },
+          { o: 'a th sp dot', cap: 'The relative clause defines the noun: no comma.', r: [2] }
+        ] },
+      { id: 'k4', lbl: 'Extra information',
+        t: { p: ['Professor Gibberne', 's'], c1: [',', 'pc'], w: ['who has invented the drug', 'q'], c2: [',', 'pc'], t: ['takes it, too', 'v'], dot: ['.', 'p'] },
+        s: [
+          { o: 'p w t dot', cap: 'Extra information about a person …' },
+          { o: 'p c1 w c2 t dot', cap: '… goes between <b>two</b> commas.', r: [3] }
+        ] },
+      { id: 'k5', lbl: 'Introductory words',
+        t: { h: ['However', 'i'], c: [',', 'pc'], e: ['the effect does not last forever', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'h e dot', cap: 'An introductory word …' },
+          { o: 'h c e dot', cap: '… is followed by a comma: However, Moreover, In “Black Mirror”, If …, ', r: [4] }
+        ] }
+    ]
+  },
+  bounds: {
+    scenes: [
+      { id: 'b1', start0: true, lbl: 'Comma splice',
+        t: { a: ['The street looks frozen', 'n'], c: [',', 'pe'], b: ['nobody moves', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'a c b dot', cap: 'Two main clauses with only a comma in between.' },
+          { set: { c: [';', 'pc'] }, cap: 'A semicolon …', r: [0] },
+          { set: { c: ['.', 'pc'], b: ['Nobody moves', 'n'] }, cap: '… or a full stop. Or a linking word: <em>so</em>, <em>but</em>, <em>because</em>.', r: [0] }
+        ] },
+      { id: 'b2', lbl: 'because',
+        t: { a: ['Many people die in accidents', 'n'], d1: ['.', 'pe'], be: ['Because', 'e'], r: ['ambulances are too slow', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'a d1 be r dot', cap: 'Is “Because ambulances are too slow.” a sentence?' },
+          { o: 'a be r dot', set: { be: ['because', 'c'] }, cap: 'No. A because-clause needs a main clause: join them.', r: [2] }
+        ] },
+      { id: 'b3', lbl: 'For example',
+        t: { f: ['For example', 'i'], c: [',', 'pc'], bm: ['the series Black Mirror', 'n'], v: ['shows', 'c'], w: ['how dangerous perfect memory can be', 'c'], dot: ['.', 'p'] },
+        s: [
+          { o: 'f bm dot', cap: 'A sentence without a verb.' },
+          { o: 'f c bm v w dot', cap: '<b>For example,</b> + a complete sentence with subject and verb.', r: [1] }
+        ] },
+      { id: 'b4', lbl: 'An -ing form is not a verb',
+        t: { m: ['Meaning that', 'e'], r: ['nobody could stop them', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'm r dot', cap: 'Where is the main verb?' },
+          { set: { m: ['This means that', 'c'] }, cap: '<b>This means that</b> … · <b>This shows that</b> … (not: Thus also showing …)', r: [1] }
+        ] }
+    ]
+  },
+  arts: {
+    scenes: [
+      { id: 'n1', start0: true, lbl: 'General meaning',
+        t: { t1: ['The', 'e'], s: ['society', 'n'], m: ['must decide whether', 'n'], t2: ['the', 'e'], hp: ['human progress', 'n'], i: ['is always good', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 't1 s m t2 hp i dot', cap: 'Society in general – with <b>the</b>?' },
+          { o: 's m hp i dot', set: { s: ['Society', 'c'], hp: ['human progress', 'c'] }, cap: 'General meaning: no article. society, humanity, people, human progress, technology, time', r: [0] }
+        ] },
+      { id: 'n2', lbl: 'Uncountable nouns',
+        t: { it: ['This is', 'n'], a: ['a', 'e'], bp: ['real progress', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'it a bp dot', cap: '<b>a</b> progress?' },
+          { o: 'it bp dot', set: { bp: ['real progress', 'c'] }, cap: 'Uncountable: no <b>a</b> and no plural. Also: information, homework, advice, damage', r: [1] },
+          { set: { bp: ['a real step forward', 'c'] }, cap: 'Or use a countable noun: <b>a step forward</b>, <b>an advance</b>.', r: [1] }
+        ] },
+      { id: 'n3', lbl: 'a or an?',
+        t: { a: ['a', 'e'], e: ['effective drug', 'n'], c: ['·', 'p'], an: ['an', 'e'], d: ['dramatic change', 'n'] },
+        s: [
+          { o: 'a e c an d', cap: 'a or an?' },
+          { set: { a: ['an', 'c'], an: ['a', 'c'] }, cap: 'It depends on the <b>sound</b>: an effective, a dramatic – a useful, an hour', r: [2] }
+        ] },
+      { id: 'n4', lbl: 'fewer or less?',
+        t: { m: ['Machines mean', 'n'], l: ['less', 'e'], j: ['jobs', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'm l j dot', cap: 'Jobs can be counted.' },
+          { set: { l: ['fewer', 'c'] }, cap: '<b>fewer</b> jobs · <b>less</b> work', r: [3] }
+        ] }
+    ]
+  },
+  adv: {
+    scenes: [
+      { id: 'w1', start0: true, lbl: 'Adjective or adverb?',
+        t: { g: ['The glass sinks', 'n'], v: ['very', 'n'], s: ['slow', 'e'], dot: ['.', 'p'] },
+        s: [
+          { o: 'g v s dot', cap: 'How does it sink?' },
+          { set: { s: ['slowly', 'c'] }, cap: 'How? → adverb: slowly, quickly, differently, <b>well</b> (not good)', r: [0] }
+        ] },
+      { id: 'w2', lbl: 'also and not',
+        t: { t: ['This could', 'n'], b: ['be', 'v'], a: ['also', 'e'], d: ['dangerous', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 't b a d dot', cap: 'Where does <b>also</b> go?' },
+          { o: 't a b d dot', hop: 'a', set: { a: ['also', 'c'] }, cap: '<b>also</b> and <b>not</b> come after the first auxiliary: could also be, would not be', r: [1] }
+        ] },
+      { id: 'w3', lbl: 'After Moreover',
+        t: { m: ['Moreover', 'i'], c: [',', 'p'], co: ['could', 'e'], it: ['it', 's'], h: ['help doctors', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'm c co it h dot', cap: 'Question word order – but this is not a question.' },
+          { o: 'm c it co h dot', hop: 'co', set: { co: ['could', 'c'] }, cap: 'After Moreover or Furthermore: subject + verb', r: [2] }
+        ] },
+      { id: 'w4', lbl: 'Pronouns',
+        t: { nt: ['New technologies', 's'], au: ['are useful', 'n'], c: [',', 'p'], b: ['but', 'n'], it: ['it', 'e'], cb: ['can be dangerous', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'nt au c b it cb dot', cap: '<b>it</b> – what does it refer to?' },
+          { set: { it: ['they', 'c'] }, cap: 'Plural → <b>they</b> / <b>them</b>. And don’t switch from <em>people</em> to <em>you</em>.', r: [3] }
+        ] }
+    ]
+  },
+  intro: {
+    scenes: [
+      { id: 'i1', start0: true, lbl: 'A typical first sentence',
+        t: { tt: ['In the text', 'e'], ti: ['“The New Accelerator”', 'q'], by: ['by Wells', 'e'], c1: [',', 'pc'], yr: ['published in 1901', 'v'], c2: [',', 'pc'],
+             ab: ['it is about a drug', 'e'], t1: ['the first-person narrator and Professor Gibberne', 't'], t2: ['test a drug', 't'], t3: ['that speeds up body and mind', 't'],
+             e1: ['and then decide to sell it', 'z'], e2: ['although it could be misused', 'z'], dot: ['.', 'p'] },
+        s: [
+          { o: 'tt by ab dot', cap: 'What is missing?' },
+          { set: { tt: ['In the short story', 'i'] }, cap: '<b>Text type</b>: short story – not text, not extract', r: [0] },
+          { o: 'tt ti by ab dot', cap: '<b>Title</b> in quotation marks', r: [1] },
+          { set: { by: ['by H. G. Wells', 's'] }, cap: '<b>Author</b>', r: [2] },
+          { o: 'tt ti by c1 yr c2 ab dot', cap: '<b>Year</b> – extra information between two commas', r: [3] },
+          { o: 'tt ti by c1 yr c2 t1 t2 t3 dot', cap: '<b>Topic</b>: who does what?', r: [4] },
+          { o: 'tt ti by c1 yr c2 t1 t2 t3 e1 e2 dot', cap: 'The topic covers the <b>whole</b> extract – including the ending!', r: [4] }
+        ] }
+    ],
+    after: ['alt']
+  },
+  struct: { after: ['in1', 'in2', 'in3', 'in4', 'body', 'weigh', 'concl', 'stat'] },
+  arg: { after: ['c1', 'c2', 'c3', 'c4', 'formula'] },
+  evid: { after: ['r1', 'r1b', 'r2', 'r2b', 'r3', 'r3b', 'tools'] },
+  concl: {
+    scenes: [
+      { id: 'q1', start0: true, lbl: 'A typical conclusion',
+        t: { a: ['All in one', 'e'], c: [',', 'p'], t: ['there are', 'n'], p: ['pros and contras', 'e'], an: ['and everyone has to decide for themselves', 'n'], dot: ['.', 'p'] },
+        s: [
+          { o: 'a c t p an dot', cap: 'Two wrong expressions – and no answer.' },
+          { set: { a: ['All in all', 'c'], p: ['pros and cons', 'c'] }, cap: 'Correct English now – but it still does not answer the question.' },
+          { set: { an: ['and everyone has to decide for themselves', 'g'] }, cap: 'Your reader wants to know what <b>you</b> think. So:' }
+        ] }
+    ],
+    after: ['k1', 'k2', 'k3', 'tools']
+  },
+  check: { after: ['l1', 'l2', 'l3', 'l4', 'l5', 'l6', 'l7', 'l8', 'task'] }
+};
+
+// Flip cards: [front, back, hint]
+const CARDS = {
+  spell: [
+    ['happend', 'happened', '-ed'],
+    ['trough', 'through', 'through the window'],
+    ['wich', 'which', ''],
+    ['wether', 'whether', 'weather: rain or sun'],
+    ['to loose control', 'to lose control', 'loose = not tight'],
+    ['to safe lives', 'to save lives', 'safe = not dangerous'],
+    ['faster then', 'faster than', 'then = after that'],
+    ['theyre / theire', 'their', 'there = in that place · they’re = they are'],
+    ['alot', 'a lot', 'two words'],
+    ['narroter', 'narrator', ''],
+    ['Professer', 'Professor', ''],
+    ['Accelarator', 'Accelerator', 'copy it from the task sheet'],
+    ['Gibberen', 'Gibberne', 'copy it from the task sheet'],
+    ['sience', 'science', ''],
+    ['freind', 'friend', ''],
+    ['responcibility', 'responsibility', '']
+  ],
+  ff: [
+    ['<span class="x">the extract</span><small>meaning the drug</small>', 'the drug · the substance', 'an extract is a part of a text'],
+    ['<span class="x">the device</span><small>meaning the drug</small>', 'the drug', 'a device is a machine'],
+    ['<span class="x">the speed limit</span><small>meaning how fast they are</small>', 'the speed', 'a speed limit is a traffic rule'],
+    ['do crimes · execute crimes', 'commit crimes', ''],
+    ['the I-narrator', 'the first-person narrator', ''],
+    ['pros and contras', 'pros and cons', ''],
+    ['All in one, …', 'All in all, …', ''],
+    ['criminality', 'crime', 'the crime rate'],
+    ['<span class="x">workplaces</span><small>meaning employment</small>', 'jobs', ''],
+    ['time stress', 'time pressure', ''],
+    ['the sense of life', 'the meaning of life', ''],
+    ['in praxis', 'in practice', ''],
+    ['It effected me.', 'It affected me.', 'affect = verb · effect = noun'],
+    ['argumentations', 'arguments', ''],
+    ['in the worst scenario', 'in the worst case', ''],
+    ['the guy · stuff · way faster', 'the man · things · much faster', 'formal register']
+  ],
+  link: [
+    ['<span class="x">Firstly</span>, the narrator feels nothing.<small>Firstly or At first?</small>', '<b>At first</b>, the narrator feels nothing.<small>at first = at the beginning (time) · firstly = first point in a list</small>'],
+    ['<span class="x">At last</span>, the drug could be misused.<small>the last point of a list</small>', '<b>Finally</b> / <b>Lastly</b>, the drug could be misused.<small>at last = after a long wait</small>'],
+    ['<span class="x">After all</span>, the risks are bigger.<small>summing up at the end</small>', '<b>All in all</b>, the risks are bigger.<small>after all = remember that … (gives a reason)</small>'],
+    ['The drug helps doctors. <span class="x">On the contrary</span>, criminals could use it.', 'The drug helps doctors. <b>On the other hand</b>, criminals could use it.<small>on the contrary = the opposite is true</small>'],
+    ['Nobody can see them. <span class="x">Subsequently</span>, crimes cannot be solved.', 'Nobody can see them. <b>Consequently</b>, crimes cannot be solved.<small>subsequently = afterwards</small>'],
+    ['They drink it. <span class="x">Therefore</span>, they open their eyes.', 'They drink it. <b>Then</b> they open their eyes.<small>therefore = for this reason – only for a consequence</small>']
+  ]
+};
+
+// Exercises: q (task), a (answer), note
+const EX = {
+  verbs: [
+    { q: 'In the extract, Gibberne {x:opened} his hand, and the glass {x:hung} in mid-air.', a: 'In the extract, Gibberne {c:opens} his hand, and the glass {c:hangs} in mid-air.', note: 'summary: simple present' },
+    { q: 'The two men {x:are going} out through the window.', a: 'The two men {c:go} out through the window.', note: 'no progressive form' },
+    { q: 'The narrator {x:don’t} know how long the effect will last.', a: 'The narrator {c:does not} know how long the effect will last.', note: 'he, she, it → does; full form in an exam text' },
+    { q: 'The drug {x:might makes} people feel superior.', a: 'The drug {c:might make} people feel superior.', note: 'modal verb + base form' },
+    { q: 'Technology {x:help} us, but it also {x:create} new problems.', a: 'Technology {c:helps} us, but it also {c:creates} new problems.' },
+    { q: 'If everyone {x:would have} the Accelerator, society {x:will} change completely.', a: 'If everyone {c:had} the Accelerator, society {c:would} change completely.', note: 'if + past → would + base form' },
+    { q: 'Gibberne {x:had taken} the drug once before.', a: 'Gibberne {c:has taken} the drug once before.', note: 'before the plot: present perfect' },
+    { q: 'The dangers of this technology {x:is} obvious.', a: 'The dangers of this technology {c:are} obvious.', note: 'subject: dangers (plural)' }
+  ],
+  spell: [
+    { q: 'The {x:narroter} cannot believe what has {x:happend}.', a: 'The {c:narrator} cannot believe what has {c:happened}.' },
+    { q: 'New {x:technologys} create new {x:possibilitys}.', a: 'New {c:technologies} create new {c:possibilities}.' },
+    { q: 'In the {x:Text}, the two men walk {x:trough} the crowd.', a: 'In the {c:text}, the two men walk {c:through} the crowd.' },
+    { q: 'They do not want to {x:loose} control over {x:theire} invention.', a: 'They do not want to {c:lose} control over {c:their} invention.' },
+    { q: '{x:Professer} Gibberne moves much faster {x:then} anyone else.', a: '{c:Professor} Gibberne moves much faster {c:than} anyone else.' },
+    { q: 'Kennedy wanted the {x:americans} to beat the {x:sowjet} Union.', a: 'Kennedy wanted the {c:Americans} to beat the {c:Soviet} Union.' },
+    { q: 'In {x:black mirror}, people replay scenes from their {x:lifes}.', a: 'In {c:Black Mirror}, people replay scenes from their {c:lives}.' },
+    { q: 'Nobody knows {x:wether} the effect will stop, {x:wich} is frightening.', a: 'Nobody knows {c:whether} the effect will stop, {c:which} is frightening.' }
+  ],
+  punct: [
+    { q: 'Gibberne explains{x:,} that the glass is still falling.', a: 'Gibberne explains that the glass is still falling.', note: 'no comma before that' },
+    { q: 'The New Accelerator{x:,} can be very dangerous.', a: 'The New Accelerator can be very dangerous.', note: 'no comma between subject and verb' },
+    { q: 'Professor Gibberne who has invented the drug takes it with the narrator.', a: 'Professor Gibberne{c:,} who has invented the drug{c:,} takes it with the narrator.', note: 'extra information: two commas' },
+    { q: 'However the effect does not last forever.', a: 'However{c:,} the effect does not last forever.', note: 'comma after an introductory word' },
+    { q: 'The street looks frozen{x:,} nobody moves.', a: 'The street looks frozen{c:.} {c:N}obody moves.', note: 'also correct: frozen; nobody moves.' },
+    { q: '{x:Its} a fascinating idea, but {x:it’s} effects are unclear.', a: '{c:It is} a fascinating idea, but {c:its} effects are unclear.', note: 'it’s = it is · its = possessive' },
+    { q: 'Many {x:human’s} dream of new {x:possibility’s}.', a: 'Many {c:humans} dream of new {c:possibilities}.', note: 'plural: no apostrophe' },
+    { q: '{x:Turners} thesis explains the American character.', a: '{c:Turner’s} thesis explains the American character.', note: 'possession: ’s' },
+    { q: 'People could commit crimes{x:. Because} nobody would see them.', a: 'People could commit crimes {c:because} nobody would see them.', note: 'a because-clause cannot stand alone' },
+    { q: 'If the drug were legal everyone would want it.', a: 'If the drug were legal{c:,} everyone would want it.', note: 'comma after an introductory if-clause' }
+  ],
+  prep: [
+    { q: 'The drug could lead {g: } serious problems.', a: 'The drug could lead {c:to} serious problems.', note: 'not: lead into' },
+    { q: 'This is a good example {g: } human progress.', a: 'This is a good example {c:of} human progress.', note: 'not: an example for' },
+    { q: '“The New Accelerator” is a short story {g: } H. G. Wells.', a: '“The New Accelerator” is a short story {c:by} H. G. Wells.', note: 'not: from' },
+    { q: 'The two men move {g: } an incredible speed.', a: 'The two men move {c:at} an incredible speed.', note: 'not: in' },
+    { q: 'The extract deals {g: } a dangerous experiment.', a: 'The extract deals {c:with} a dangerous experiment.', note: 'not: deals about' },
+    { q: 'Technology has a huge effect {g: } our lives.', a: 'Technology has a huge effect {c:on} our lives.' },
+    { q: 'Many people are afraid {g: } new technologies.', a: 'Many people are afraid {c:of} new technologies.' },
+    { q: 'This idea is similar {g: } Turner’s thesis.', a: 'This idea is similar {c:to} Turner’s thesis.', note: 'not: similar as' },
+    { q: 'We must take the risks {g: } account.', a: 'We must take the risks {c:into} account.' },
+    { q: 'The text is an extract {g: } a short story.', a: 'The text is an extract {c:from} a short story.' },
+    { q: 'People worry {g: } the consequences.', a: 'People worry {c:about} the consequences.' },
+    { q: 'Some people are in favour {g: } using the drug.', a: 'Some people are in favour {c:of} using the drug.', note: 'in favour of + -ing' }
+  ],
+  words: [
+    { q: '{x:The society} must decide how far progress may go.', a: '{c:Society} must decide how far progress may go.', note: 'general meaning: no article' },
+    { q: 'For many people, this invention is {x:a big progress}.', a: 'For many people, this invention is {c:a big step forward}.', note: 'progress is uncountable – or: great progress' },
+    { q: 'Criminals could {x:do} crimes without being caught.', a: 'Criminals could {c:commit} crimes without being caught.' },
+    { q: 'The glass sinks very {x:slow}.', a: 'The glass sinks very {c:slowly}.', note: 'how? → adverb' },
+    { q: 'This would {x:be not} fair.', a: 'This would {c:not be} fair.', note: 'not after the first auxiliary' },
+    { q: 'Furthermore, {x:could it} help doctors in emergencies.', a: 'Furthermore, {c:it could} help doctors in emergencies.', note: 'normal word order' },
+    { q: 'New technologies are useful, but {x:it} can be dangerous.', a: 'New technologies are useful, but {c:they} can be dangerous.' },
+    { q: 'The {x:extract} makes the two men a thousand times faster.', a: 'The {c:drug} makes the two men a thousand times faster.', note: 'extract = the text' },
+    { q: 'The story is told by {x:an I-narrator}.', a: 'The story is told by {c:a first-person narrator}.' },
+    { q: 'There are many pros and {x:contras}.', a: 'There are many pros and {c:cons}.' }
+  ],
+  sort: [
+    { q: 'The narrator feels light, comfortable and confident.', a: '{c:In} – his experience is part of the task', note: '' },
+    { q: 'Everything around them seems to stand still: a glass hangs in mid-air.', a: '{c:In} – one or two examples are enough' },
+    { q: 'Gibberne explains that a falling object drops 16 feet in the first second.', a: '{e:Out} – a detail' },
+    { q: 'Nobody knows how long the effect will last.', a: '{c:In} – often missing!' },
+    { q: '“Analysed sound,” he says.', a: '{e:Out} – no quotations, no direct speech' },
+    { q: 'I think Gibberne is very irresponsible.', a: '{e:Out} – no opinion – keep it for the discussion' },
+    { q: 'They go out through the window, and the crowd looks like wax figures to them.', a: '{c:In} – the walk outside belongs to his experiences' },
+    { q: 'The streets are full of colourful lights and music.', a: '{e:Out} – not in the text – never invent' },
+    { q: 'They decide to produce and sell the drug although they know that criminals could misuse it.', a: '{c:In} – the plans for the invention – the second part of the task' },
+    { q: 'Professor Gibberne has invented a substance called the New Accelerator, which speeds up the human body and mind.', a: '{e:Out} – copied from the introduction – use your own words' }
+  ],
+  link: [
+    { q: '{g: }, the narrator feels nothing. Then he notices the curtain.', a: '{c:At first}, the narrator feels nothing. Then he notices the curtain.' },
+    { q: '{g: }, the drug could save lives. Secondly, it could help people at work.', a: '{c:Firstly}, the drug could save lives. Secondly, it could help people at work.' },
+    { q: 'The drug is not harmless. {g: }, it is extremely dangerous.', a: 'The drug is not harmless. {c:On the contrary}, it is extremely dangerous.', note: 'the opposite is true' },
+    { q: 'The drug could help doctors. {g: }, criminals could use it.', a: 'The drug could help doctors. {c:On the other hand}, criminals could use it.', note: 'also correct: However,' },
+    { q: 'Nobody would see the criminals. {g: }, the crimes could not be solved.', a: 'Nobody would see the criminals. {c:Consequently}, the crimes could not be solved.', note: 'also correct: Therefore, / As a result,' },
+    { q: 'Why shouldn’t they try it? {g: }, Gibberne has taken it before.', a: 'Why shouldn’t they try it? {c:After all}, Gibberne has taken it before.', note: 'gives a reason' },
+    { q: 'They walk through the frozen crowd. {g: }, they decide to sell the drug.', a: 'They walk through the frozen crowd. {c:In the end}, they decide to sell the drug.', note: 'also correct: Finally,' },
+    { q: '{g: }, the risks outweigh the benefits.', a: '{c:All in all}, the risks outweigh the benefits.', note: 'also correct: In conclusion, / On balance,' }
+  ]
+};
+
+/* ---------- Helpers ---------- */
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const mk = s => s.replace(/\{(\w+):([^}]*)\}/g, '<span class="m m-$1">$2</span>');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let instant = false;
+const still = () => instant || reduce;
+function quiet(fn) { instant = true; try { fn(); } finally { instant = false; } }
+function reveal(el) { if (el && !instant) el.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' }); }
+const fmt = v => v.toLocaleString('en-US');
+function countUp(root) {
+  $$('[data-n]', root).forEach(n => {
+    const to = +n.dataset.n;
+    const pre = n.dataset.pre || '';
+    if (still()) { n.textContent = pre + fmt(to); return; }
+    const t0 = performance.now(), dur = 1200;
+    const step = t => {
+      const p = Math.min(1, (t - t0) / dur);
+      n.textContent = pre + fmt(Math.round(to * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    n.textContent = pre + '0';
+    requestAnimationFrame(step);
+  });
+}
+
+/* ---------- Scene: word tiles that rebuild a sentence ---------- */
+
+function makeScene(def) {
+  const el = document.createElement('div');
+  el.className = 'scene off';
+  el.innerHTML = `${def.lbl ? `<p class="orig">${def.lbl}</p>` : ''}<div class="tiles${def.tight ? ' tight' : ''}"></div><p class="cap"></p>`;
+  const tilesEl = $('.tiles', el), capEl = $('.cap', el);
+  let tok = { ...def.t }, order = [];
+  const snaps = def.s.map(st => {
+    if (st.set) tok = { ...tok, ...st.set };
+    if (st.o) order = st.o.split(' ');
+    const list = x => (x || '').split(' ').filter(Boolean);
+    return { order, tok, cap: st.cap || '', pulse: list(st.pulse), hop: list(st.hop) };
+  });
+  let cur = -1;
+
+  function render(j) {
+    if (j === cur) return;
+    const first = cur === -1;
+    cur = j;
+    const snap = snaps[j];
+    $$('.out', tilesEl).forEach(x => x.remove());
+    const old = new Map($$('.w:not(.out)', tilesEl).map(e => [e.dataset.id, e]));
+    const rects = new Map([...old].map(([id, e]) => [id, e.getBoundingClientRect()]));
+    const box = tilesEl.getBoundingClientRect();
+    const keep = new Set(snap.order);
+
+    old.forEach((e, id) => {
+      if (keep.has(id)) return;
+      if (still() || first) { e.remove(); return; }
+      const r = rects.get(id);
+      e.classList.add('out');
+      tilesEl.appendChild(e);
+      Object.assign(e.style, { position: 'absolute', left: (r.left - box.left) + 'px', top: (r.top - box.top) + 'px', margin: 0 });
+      e.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(1.6em) rotate(-12deg)' }],
+        { duration: 650, easing: 'cubic-bezier(.5,0,.8,.4)', fill: 'forwards' }).onfinish = () => e.remove();
+      setTimeout(() => e.remove(), 800);
+    });
+
+    $$('.glue', tilesEl).forEach(g => g.replaceWith(...g.childNodes));
+    let prevEl = null;
+    const live = snap.order.map(id => {
+      const [text, role] = snap.tok[id];
+      let e = old.get(id), fresh = false;
+      if (!e) {
+        e = document.createElement('span');
+        e.dataset.id = id;
+        e.innerHTML = '<span class="tx"></span>';
+        fresh = true;
+      }
+      const changed = !fresh && (e.dataset.text !== text || e.dataset.role !== role);
+      e.dataset.text = text;
+      e.dataset.role = role;
+      e.firstChild.textContent = text;
+      e.className = 'w r-' + (role || 'n');
+      if (role && role[0] === 'p' && prevEl && text !== '·') {
+        // keep punctuation on the same line as the word before it
+        const g = document.createElement('span');
+        g.className = 'glue';
+        tilesEl.insertBefore(g, prevEl);
+        g.append(prevEl, e);
+        prevEl = g;
+      } else { tilesEl.appendChild(e); prevEl = e; }
+      return { e, id, fresh, changed };
+    });
+    capEl.innerHTML = snap.cap;
+
+    if (still() || first) return;
+    capEl.animate([{ opacity: 0, transform: 'translateY(.3em)' }, { opacity: 1, transform: 'none' }], { duration: 350, easing: 'ease-out' });
+
+    live.forEach(({ e, id, fresh, changed }) => {
+      if (fresh) {
+        e.animate([{ opacity: 0, transform: 'translateY(-1.2em) scale(.8)' }, { opacity: 1, transform: 'none' }],
+          { duration: 550, easing: 'cubic-bezier(.2,.9,.3,1.25)' });
+        return;
+      }
+      const f = rects.get(id), l = e.getBoundingClientRect();
+      const dx = f.left - l.left, dy = f.top - l.top;
+      if (Math.abs(dx) > .5 || Math.abs(dy) > .5) {
+        if (snap.hop.includes(id)) {
+          const lift = parseFloat(getComputedStyle(e).fontSize) * 1.6;
+          e.animate([
+            { transform: `translate(${dx}px,${dy}px)` },
+            { transform: `translate(${dx / 2}px,${dy / 2 - lift}px) rotate(6deg)`, offset: .5 },
+            { transform: 'none' }
+          ], { duration: 900, easing: 'ease-in-out' });
+        } else {
+          e.animate([{ transform: `translate(${dx}px,${dy}px)` }, { transform: 'none' }],
+            { duration: 700, easing: 'cubic-bezier(.3,.7,.2,1)' });
+        }
+      }
+      if (changed) {
+        e.firstChild.animate([{ transform: 'rotateX(90deg)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 520, easing: 'ease-out' });
+        e.animate([{ boxShadow: '0 0 0 .4em rgba(31,122,58,.45)' }, { boxShadow: '0 0 0 0 rgba(31,122,58,0)' }], { duration: 1200, easing: 'ease-out' });
+      }
+    });
+    snap.pulse.forEach(id => {
+      const hit = live.find(x => x.id === id);
+      if (hit) hit.e.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.18)' }, { transform: 'scale(1)' }], { duration: 650, iterations: 2, easing: 'ease-in-out' });
+    });
+  }
+  function reset() { tilesEl.innerHTML = ''; capEl.innerHTML = ''; cur = -1; }
+  return { el, def, render, reset, get cur() { return cur; } };
+}
+
+/* ---------- Slide types ---------- */
+
+// Slide with steps (scenes and reveals)
+function beatsSlide(el, cfg) {
+  const host = $('.scenes', el);
+  const scenes = (cfg.scenes || []).map(def => { const s = makeScene(def); host.appendChild(s.el); return s; });
+  const rules = $$('.rules li', el);
+  const shows = $$('[data-show]', el);
+  const beats = [];
+  (cfg.scenes || []).forEach(def => def.s.forEach((st, j) => {
+    if (j === 0) { if (!def.start0) beats.push({ sc: def.id, st: 0 }); }
+    else beats.push({ sc: def.id, st: j, r: st.r || [] });
+  }));
+  (cfg.after || []).forEach(name => beats.push({ show: name }));
+  let k = 0, wasShown = new Set();
+
+  function render() {
+    const done = beats.slice(0, k);
+    const last = done[done.length - 1];
+    scenes.forEach(s => {
+      let st = s.def.start0 ? 0 : null;
+      done.forEach(b => { if (b.sc === s.def.id) st = b.st; });
+      if (st === null) { if (s.cur !== -1) s.reset(); s.el.classList.add('off'); }
+      else { s.el.classList.remove('off'); s.render(st); }
+      s.el.classList.toggle('dim', !!(last && last.sc && last.sc !== s.def.id && st !== null));
+    });
+    const seen = new Set(), now = new Set(last && last.r || []);
+    done.forEach(b => (b.r || []).forEach(r => seen.add(r)));
+    rules.forEach((li, i) => { li.classList.toggle('lock', !seen.has(i)); li.classList.toggle('now', now.has(i)); });
+    const shown = new Set(done.map(b => b.show).filter(Boolean));
+    shows.forEach(x => {
+      const on = shown.has(x.dataset.show);
+      x.classList.toggle('on', on);
+      if (on && !wasShown.has(x.dataset.show)) countUp(x);
+    });
+    wasShown = shown;
+    if (last) reveal(last.sc ? scenes.find(s => s.def.id === last.sc).el : shows.find(x => x.dataset.show === last.show));
+  }
+  quiet(render);
+  return {
+    unit: 'Step', get k() { return k; }, get max() { return beats.length; },
+    next() { if (k < beats.length) { k++; render(); return true; } return false; },
+    prev() { if (k > 0) { k--; render(); return true; } return false; },
+    reset() { k = 0; wasShown = new Set(); scenes.forEach(s => s.reset()); render(); },
+    end() { k = beats.length; render(); },
+    jump(n) { k = Math.max(0, Math.min(beats.length, n)); render(); }
+  };
+}
+
+// Exercise slide: reveal answers or turn cards one by one
+function buildList(ol) {
+  ol.innerHTML = EX[ol.dataset.ex].map((d, i) => `
+    <li class="it" tabindex="0" role="button" aria-expanded="false">
+      <span class="n">${i + 1}</span>
+      <div class="q">${mk(d.q)}</div>
+      <div class="a"><span class="line"></span><span class="sol">${mk(d.a)}${d.note ? `<span class="note">${d.note}</span>` : ''}</span></div>
+    </li>`).join('');
+}
+function buildCards(box) {
+  box.innerHTML = CARDS[box.dataset.cards].map(([f, b, h]) => {
+    const front = f.includes('<') ? f : `<span class="x">${f}</span>`;
+    return `<button class="card it"><span class="face front">${front}</span><span class="face back"><span>${b}</span>${h ? `<small>${h}</small>` : ''}</span></button>`;
+  }).join('');
+}
+function itemsSlide(el) {
+  $$('.ex-list', el).forEach(buildList);
+  $$('.cards[data-cards]', el).forEach(buildCards);
+  const items = $$('.it', el), all = $('.all', el);
+  const isOn = i => i.classList.contains('on');
+  function set(i, on) { i.classList.toggle('on', on); i.setAttribute('aria-expanded', on); }
+  function upd() { if (all) all.textContent = items.every(isOn) ? all.dataset.b : all.dataset.a; ui(); }
+  items.forEach(i => {
+    i.addEventListener('click', ev => { set(i, !isOn(i)); upd(); if (ev.detail) i.blur(); });
+    i.addEventListener('keydown', ev => {
+      if (i.tagName === 'BUTTON') return;
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); ev.stopPropagation(); set(i, !isOn(i)); upd(); }
+    });
+  });
+  if (all) all.addEventListener('click', ev => { const show = !items.every(isOn); items.forEach(i => set(i, show)); upd(); if (ev.detail) all.blur(); });
+  return {
+    unit: el.dataset.unit || 'Answer',
+    get k() { return items.filter(isOn).length; }, get max() { return items.length; },
+    next() { const h = items.find(i => !isOn(i)); if (!h) return false; set(h, true); upd(); reveal(h); return true; },
+    prev() { const s = items.filter(isOn).pop(); if (!s) return false; set(s, false); upd(); return true; },
+    reset() { items.forEach(i => set(i, false)); upd(); },
+    end() { items.forEach(i => set(i, true)); upd(); },
+    jump(n) { items.forEach((i, x) => set(i, x < n)); upd(); }
+  };
+}
+
+/* ---------- Deck ---------- */
+
+$$('.mk').forEach(x => { x.innerHTML = mk(x.innerHTML); });
+
+let cur = -1;
+const slides = $$('.slide').map(el => {
+  const c = el.dataset.kind === 'items' ? itemsSlide(el) : beatsSlide(el, CFG[el.dataset.cfg] || {});
+  return Object.assign(c, { el, part: el.dataset.part, title: el.dataset.title, visited: false });
+});
+
+// Progress bar
+const prog = $('#prog'), groups = [];
+slides.forEach((s, i) => {
+  let g = groups[groups.length - 1];
+  if (!g || g.name !== s.part) { g = { name: s.part, idx: [] }; groups.push(g); }
+  g.idx.push(i);
+});
+prog.innerHTML = groups.map(g => `<div class="grp"><span class="gl">${g.name}</span><div class="segs">${
+  g.idx.map(i => `<button class="seg" data-i="${i}" title="${slides[i].title}" aria-label="Slide ${i + 1}: ${slides[i].title}"></button>`).join('')
+}</div></div>`).join('');
+prog.addEventListener('click', ev => { const b = ev.target.closest('.seg'); if (b) { go(+b.dataset.i); if (ev.detail) b.blur(); } });
+
+function ui() {
+  if (cur < 0) return;
+  const s = slides[cur];
+  $('#slideNo').textContent = `Slide ${cur + 1} of ${slides.length}`;
+  $('#stepNo').textContent = s.max ? `${s.unit} ${s.k} of ${s.max}` : '';
+  $('#prev').disabled = cur === 0 && s.k === 0;
+  const more = s.k < s.max;
+  $('#next').textContent = more ? 'Next' : 'Next slide';
+  $('#next').disabled = !more && cur === slides.length - 1;
+  $$('.seg', prog).forEach((b, i) => {
+    b.classList.toggle('cur', i === cur);
+    b.classList.toggle('seen', slides[i].visited && i !== cur);
+    if (i === cur) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+  });
+}
+function go(i) {
+  if (i < 0 || i >= slides.length || i === cur) return;
+  const back = i < cur;
+  if (cur >= 0) slides[cur].el.classList.remove('cur');
+  cur = i;
+  const s = slides[cur];
+  s.el.classList.add('cur');
+  if (back && !s.visited) quiet(() => s.end());
+  s.visited = true;
+  s.el.scrollTop = 0;
+  ui();
+  try { history.replaceState(null, '', '#' + (cur + 1)); } catch (e) { /* not allowed for file:// in some browsers */ }
+}
+function next() { if (slides[cur].next()) ui(); else go(cur + 1); }
+function prev() { if (slides[cur].prev()) ui(); else go(cur - 1); }
+function resetSlide() { quiet(() => slides[cur].reset()); slides[cur].el.scrollTop = 0; ui(); }
+
+// Text size
+let scale = 1;
+try { scale = parseFloat(localStorage.getItem('en31-cm-scale')) || 1; } catch (e) { /* no storage */ }
+function setScale(v) {
+  scale = Math.min(1.8, Math.max(.7, Math.round(v * 10) / 10));
+  document.documentElement.style.setProperty('--scale', scale);
+  try { localStorage.setItem('en31-cm-scale', scale); } catch (e) { /* no storage */ }
+}
+setScale(scale);
+
+// Full screen
+function fullscreen() {
+  const d = document, r = d.documentElement;
+  try {
+    if (d.fullscreenElement || d.webkitFullscreenElement) (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+    else { const p = (r.requestFullscreen || r.webkitRequestFullscreen).call(r); if (p && p.catch) p.catch(() => {}); }
+  } catch (e) { /* full screen not available */ }
+}
+
+// Controls
+const bind = (id, fn) => $(id).addEventListener('click', ev => { fn(); if (ev.detail) ev.currentTarget.blur(); });
+bind('#next', next);
+bind('#prev', prev);
+bind('#reset', resetSlide);
+bind('#smaller', () => setScale(scale - .1));
+bind('#bigger', () => setScale(scale + .1));
+bind('#fs', fullscreen);
+
+document.addEventListener('keydown', ev => {
+  if (ev.metaKey || ev.ctrlKey || ev.altKey) return;
+  const t = ev.target, onBtn = t.tagName === 'BUTTON' || (t.getAttribute && t.getAttribute('role') === 'button');
+  switch (ev.key) {
+    case 'ArrowRight': case 'PageDown': case 'ArrowDown': ev.preventDefault(); next(); break;
+    case 'ArrowLeft': case 'PageUp': case 'ArrowUp': ev.preventDefault(); prev(); break;
+    case ' ': if (onBtn) return; ev.preventDefault(); next(); break;
+    case 'Home': ev.preventDefault(); go(0); break;
+    case 'End': ev.preventDefault(); go(slides.length - 1); break;
+    case 'f': case 'F': fullscreen(); break;
+    case 'r': case 'R': resetSlide(); break;
+    case '+': case '=': setScale(scale + .1); break;
+    case '-': setScale(scale - .1); break;
+  }
+});
+
+// Start (#5 opens slide 5, #5.3 opens slide 5 at step 3)
+const m = /^#(\d+)(?:\.(\d+))?$/.exec(location.hash);
+const start = m ? Math.min(slides.length, Math.max(1, +m[1])) - 1 : 0;
+go(start);
+if (m && m[2]) { quiet(() => slides[start].jump(+m[2])); ui(); }
+})();
+</script>
+</body>
+</html>
